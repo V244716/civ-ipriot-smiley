@@ -1,9 +1,10 @@
+import time
+from blinkable import Blinkable
 from smiley import Smiley
-
 
 class Sad(Smiley):
     def __init__(self):
-        super().__init__()
+        super().__init__(complexion=self.BLUE)
 
         self.draw_mouth()
         self.draw_eyes()
@@ -23,4 +24,22 @@ class Sad(Smiley):
         """
         eyes = [10, 13, 18, 21]
         for pixel in eyes:
-            self.pixels[pixel] = self.BLANK if wide_open else self.YELLOW
+            self.pixels[pixel] = self.BLANK if wide_open else self.complexion()
+
+    def blink(self, delay=0.25):
+        """
+        Make the sad smiley blink twice with a certain delay (in s).
+        This is the implementation of the abstract method from the
+        Blinkable abstract class.
+
+        :param delay: Delay in seconds
+        """
+        eyes_open = False
+        count = 6
+        while count > 0:
+            self.draw_eyes(wide_open=eyes_open)
+            self.show()
+            time.sleep(delay)
+            eyes_open = not eyes_open
+            count -= 1
+
